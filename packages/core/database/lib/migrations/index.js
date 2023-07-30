@@ -34,7 +34,12 @@ const migrationResolver = ({ name, path, context }) => {
 };
 
 const createUmzugProvider = (db) => {
-  const migrationDir = path.join(strapi.dirs.app.root, 'database/migrations');
+  // Changed for compatibility with PKG
+  // strapi.dirs.app.root was trying to write inside the executable (snapshot) folder
+  // using process.cwd() we set the path outside of the executable.
+
+  // WAS: const migrationDir = path.join(strapi.dirs.app.root, 'database/migrations');
+  const migrationDir = path.join(process.cwd(), 'database/migrations');
 
   fse.ensureDirSync(migrationDir);
 
